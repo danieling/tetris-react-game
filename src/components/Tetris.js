@@ -7,7 +7,7 @@ import Display from './Display'
 import StartButton from './StartButton'
 import { usePlayer } from '../hooks/usePlayer';
 import { useStage } from '../hooks/useStage';
-import { createStage } from '../gameHelpers';
+import { createStage, checkCollision } from '../gameHelpers';
 
 const Tetris = () => {
     const [dropTime, setDropTime] = useState(null);
@@ -19,7 +19,8 @@ const Tetris = () => {
     console.log('re-render')
 
     const movePlayer = dir => {
-        
+        if(!checkCollision(player, stage, {x: dir, y: 0}))
+            updatePlayerPos({x: dir, y: 0, collided: false});
     }
 
     const startGame = () => {
@@ -28,7 +29,8 @@ const Tetris = () => {
     }
 
     const drop = () => {
-        updatePlayerPos({x: 0, y: 1, collided: false});
+        if(!checkCollision(player, stage, { x: 0, y: 1 }))
+            updatePlayerPos({x: 0, y: 1, collided: false});
     }
 
     const dropPlayer = () => {
@@ -62,7 +64,7 @@ const Tetris = () => {
                         <Display text="Level"/>
                     </div>
                     )}
-                    <StartButton onClick={startGame} />
+                    <StartButton callback={startGame} />
                 </aside>
             </StyledTetris>
         </StyledTetrisWrapper>
